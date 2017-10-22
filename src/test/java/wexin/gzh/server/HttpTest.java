@@ -12,7 +12,13 @@ public class HttpTest {
 	public void test1() {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> res = restTemplate.postForEntity("http://" + HOST + "/testWeixin", null,String.class);
-		System.out.println(res.getBody());
+		System.out.println(res.getBody() );
+	}
+	
+	@Test
+	public void testDb() {
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.getForEntity("http://" + HOST + "/testDB",null);
 	}
 	
 }
