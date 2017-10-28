@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,9 @@ import weixin.gzh.server.util.SignUtil;
 @RestController
 public class HttpController {
 	final Log log=LogFactory.getLog(HttpController.class);
+	
+	@Autowired
+	CoreService coreService;
 	
 	@RequestMapping(value = "/testWeixin", method = RequestMethod.POST)
 	public void t2() {
@@ -55,7 +59,7 @@ public class HttpController {
 				response.setCharacterEncoding("UTF-8");
 
 				// 调用核心业务类接收消息、处理消息
-				String respMessage = CoreService.processRequest(request);
+				String respMessage = coreService.processRequest(request);
 				
 				// 响应消息
 				PrintWriter out = response.getWriter();

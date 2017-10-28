@@ -10,7 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import weixin.gzh.server.dao.PhoneMapper;
+import weixin.gzh.server.model.PhoneTest;
 import weixin.gzh.server.model.res.Article;
 import weixin.gzh.server.model.res.NewsMessage;
 import weixin.gzh.server.model.res.TextMessage;
@@ -22,17 +26,19 @@ import weixin.gzh.server.util.MessageUtil;
  * @author liufeng
  * @date 2013-07-25
  */
+@Service
 public class CoreService {
 	
 	//private static Logger log = LoggerFactory.getLogger(CoreService.class);
-	
+	@Autowired
+	DaoService daoService;
 	/**
 	 * 处理微信发来的请求
 	 * 
 	 * @param request
 	 * @return
 	 */
-	public static String processRequest(HttpServletRequest request) {
+	public  String processRequest(HttpServletRequest request) {
 		String respMessage = null;
 		try {
 			// xml请求解析
@@ -48,6 +54,9 @@ public class CoreService {
 			System.out.println("msgType:"+msgType);
 			System.out.println("fromUserName:"+fromUserName);
 			System.out.println("toUserName:"+toUserName);
+			
+			String content1 = requestMap.get("Content");
+			System.out.println("content1:"+content1);
 
 			// 默认回复此文本消息
 			TextMessage textMessage = new TextMessage();
@@ -58,14 +67,19 @@ public class CoreService {
 			textMessage.setFuncFlag(0);
 			// 由于href属性值必须用双引号引起，这与字符串本身的双引号冲突，所以要转义			
 			StringBuffer contentMsg = new StringBuffer();  
-			contentMsg.append("欢迎春华教育集团微信公众平台").append("\n");  
-			contentMsg.append("您好，我是机器人小Q，请回复数字选择服务：").append("\n\n");  
+			/*contentMsg.append("您好，我是机器人小Q，请回复数字选择服务：").append("\n\n");  
 			contentMsg.append("1  学生档案查询").append("\n");  
 			contentMsg.append("2  学生信息查询").append("\n");  
 			contentMsg.append("3  学校网点查询").append("\n");  
 			contentMsg.append("4  课程查询").append("\n");  
 			contentMsg.append("5  成绩查询").append("\n");  
-			contentMsg.append("点击查看 <a href=\"http://www.chinwin.com\">帮助手册</a>");  
+			contentMsg.append("点击查看 <a href=\"http://www.chinwin.com\">帮助手册</a>");  */
+			List<PhoneTest> pt = daoService.findList();
+			if(pt!=null&&pt.size()>0) {
+				for(int i=0,l=pt.size();i<l;i++) {
+					contentMsg.append(i+"、"+pt.get(i).getText()).append("\n");
+				}
+			}
 
 			textMessage.setContent(contentMsg.toString());
 			// 将文本消息对象转换成xml字符串

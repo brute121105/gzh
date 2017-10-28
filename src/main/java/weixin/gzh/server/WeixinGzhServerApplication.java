@@ -4,15 +4,19 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import weixin.gzh.server.persistence.pageAble.Dialect;
 import weixin.gzh.server.persistence.pageAble.MySQLDialect;
 import weixin.gzh.server.persistence.pageAble.MybatisPageableInterceptor;
 
 
-
+@Configuration
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class} )
 @SpringBootApplication
 public class WeixinGzhServerApplication implements CommandLineRunner{
 	final Log logg=LogFactory.getLog(WeixinGzhServerApplication.class);
