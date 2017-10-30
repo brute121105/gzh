@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="weixin.gzh.server.dao.PhoneMapper">
+	<resultMap type="weixin.gzh.server.model.PhoneTest" id="BaseResultMap">
+		<id column="id" property="id" jdbcType="INTEGER"/>
+		<result column="phone" property="phone" jdbcType="VARCHAR"/>
+		<result column="text" property="text" jdbcType="VARCHAR"/>
+	</resultMap>
+   <sql id="Base_Column_List" >
+   id,phone,text
+  </sql>
+	<select id="findAll" resultMap="BaseResultMap" >
+		select <include refid="Base_Column_List" />
+		from my_table1
+	</select>
+</mapper>
