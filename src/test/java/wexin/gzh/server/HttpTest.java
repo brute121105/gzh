@@ -4,6 +4,11 @@ import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import com.alibaba.fastjson.JSON;
+
+import weixin.gzh.server.conf.DomainConf;
+import weixin.gzh.server.service.DataService;
+
 
 
 public class HttpTest {
@@ -18,7 +23,19 @@ public class HttpTest {
 	@Test
 	public void testDb() {
 		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.getForEntity("http://" + HOST + "/testDB",null);
+		ResponseEntity<Object> resp = restTemplate.getForEntity("http://" + HOST + "/testDB",Object.class);
+		System.out.println("-->"+JSON.toJSONString(resp.getBody()));
+	}
+	
+	@Test
+	public void testDBLike() {
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.getForEntity("http://" + HOST + "/testDBQC",null);
+	}
+	@Test
+	public void testUtil() {
+		System.out.println(JSON.toJSONString(DomainConf.getDomain()));
+		DataService service = new DataService();
 	}
 	
 }

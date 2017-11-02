@@ -5,12 +5,44 @@
 		<id column="id" property="id" jdbcType="INTEGER"/>
 		<result column="phone" property="phone" jdbcType="VARCHAR"/>
 		<result column="text" property="text" jdbcType="VARCHAR"/>
+		<result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+		<result column="user_id" property="userId" jdbcType="VARCHAR"/>
+		<result column="to_username" property="fromUserName" jdbcType="VARCHAR"/>
+		<result column="from_username" property="toUserName" jdbcType="VARCHAR"/>
 	</resultMap>
    <sql id="Base_Column_List" >
-   id,phone,text
+   id,user_id,phone,text,create_time,to_username,from_username
   </sql>
 	<select id="findAll" resultMap="BaseResultMap" >
 		select <include refid="Base_Column_List" />
 		from my_table1
 	</select>
+	
+	<select id="findByText" resultMap="BaseResultMap" parameterType="weixin.gzh.server.model.PhoneTest">
+		select <include refid="Base_Column_List" />
+		from my_table1 where text like #{text,jdbcType=VARCHAR} and create_time>#{create_time,jdbcType=TIMESTAMP}
+		order by create_time
+	</select>
+	
+	<select id="findListByMap" resultMap="BaseResultMap" parameterType="Map">
+		select <include refid="Base_Column_List" />
+		from my_table1 where text like #{text,jdbcType=VARCHAR} 
+		                            and (  create_time>#{today,jdbcType=TIMESTAMP} 
+		                                 or ( DATE_FORMAT(create_time,'%Y-%m-%d')=#{lastDay,jdbcType=TIMESTAMP} and text like '%明天%' ) 
+		                                )
+		order by create_time
+	</select>
+	
+	<insert id="save" parameterType="weixin.gzh.server.model.PhoneTest" >
+    insert into 
+    my_table1 (text,create_time,to_username,from_username)
+    values    (#{text,jdbcType=VARCHAR},#{create_time,jdbcType=TIMESTAMP},#{toUserName,jdbcType=VARCHAR},#{fromUserName,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="saveReq" parameterType="weixin.gzh.server.model.PhoneTest" >
+    insert into 
+    tbl_req (text,create_time,to_username,from_username)
+    values    (#{text,jdbcType=VARCHAR},#{create_time,jdbcType=TIMESTAMP},#{toUserName,jdbcType=VARCHAR},#{fromUserName,jdbcType=VARCHAR})
+  </insert>
+  
 </mapper>
