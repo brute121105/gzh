@@ -1,5 +1,11 @@
-server: 
-  port: 80
+server:
+  port: 443
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: zaq12WSX
+    keyStoreType: PKCS12
+    keyAlias: tomcat
+  
 
 spring:
   application:

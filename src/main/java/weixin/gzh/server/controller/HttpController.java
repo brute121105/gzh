@@ -9,10 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+
+import weixin.gzh.server.conf.ValicodeCache;
 import weixin.gzh.server.service.CoreService;
 import weixin.gzh.server.util.SignUtil;
 
@@ -26,9 +29,31 @@ public class HttpController {
 	@Autowired
 	CoreService coreService;
 	
-	@RequestMapping(value = "/testWeixin", method = RequestMethod.POST)
-	public void t2() {
-		log.info("test--weixin--gongzonghao----");
+	@RequestMapping(value = "/die", method = RequestMethod.GET)
+	public String die() {
+		log.info("die--weixin--zc----");
+		return "OK";
+	}
+	
+	@RequestMapping(value = "/getValidCode", method = RequestMethod.GET)
+	public String getValidCode() {
+		String phone = ValicodeCache.phone;
+		String code = ValicodeCache.valicode;
+		log.info("getValidCodec----"+code);
+		return phone+","+code;
+	}
+	
+	@RequestMapping(value = "/sendValidCode", method = RequestMethod.GET)
+	public String sendValidCode(String phone,String code) {
+		if(!StringUtils.isEmpty(phone)) {
+			ValicodeCache.phone = phone;
+			log.info("sendValidCode----phone:"+phone);
+		}
+		if(!StringUtils.isEmpty(code)) {
+			ValicodeCache.valicode = code;
+			log.info("sendValidCode----code:"+code);
+		}
+		return "OK";
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
